@@ -1,4 +1,15 @@
-# BLUF Email Formatter
+---
+title: BLUF Email Formatter
+emoji: 📧
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: "4.44.0"
+app_file: app.py
+pinned: false
+---
+
+# 📧 BLUF Email Formatter
 
 A Gradio-based Hugging Face Space that transforms draft emails into clear, actionable communication using the **Bottom Line Up Front (BLUF)** methodology.
 
