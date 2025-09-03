@@ -11,6 +11,8 @@ pinned: false
 
 # 📧 BLUF Email Formatter
 
+![alt text](screenshots/1.png)
+
 A Gradio-based Hugging Face Space that transforms draft emails into clear, actionable communication using the **Bottom Line Up Front (BLUF)** methodology.
 
 [Learn more about BLUF](https://hbr.org/2016/11/how-to-write-email-with-military-precision).

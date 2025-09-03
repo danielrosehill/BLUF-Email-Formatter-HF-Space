@@ -1,0 +1,8 @@
+[
+  {
+    "subject": "DECISION: Choose Approach for Email Signature and Shortlink",
+    "bluf_tag": "DECISION:",
+    "bluf_summary": "We need to decide on the email signature design and the shortlink structure for the two editions of the book. Options include a call to action with a shortlink or a shortlink tree leading to individual assets.",
+    "email": "Bottom Line Up Front\n\nPurpose: DECISION:\n\nWe need to decide on the email signature design and the shortlink structure for the two editions of the book. Options include a call to action with a shortlink or a shortlink tree leading to individual assets.\n\nHi Hannah,\n\nI was thinking about the conference call yesterday. \n\nSome thoughts:\n\n- Do you still want to go ahead with the email signature idea? If so, I would recommend sending it out for design today. \n\nThe typical format would be a call to action with the shortlink.\n\nHowever ... as we're looking at publishing two editions (on Amazon UK and US) I would actuallly recommend that we link to a short link tree which I would be happy to create. \n\nThese are basically slim landing pages with buttons linking on to individaul assets. \n\nIf so, I can implement any variations on this theme:\n\nbook.hannah.com\nhannah.com/buy-book\n\nEtc\n\nLet me know your preferences and I can get a wireframe over to you later.\n\nBest,\n\nDaniel"
+  }
+]
