@@ -1,19 +1,9 @@
-import streamlit as st
+import gradio as gr
 import openai
 import json
-from typing import Dict, Any
-import pyperclip
-
-# Page configuration
-st.set_page_config(
-    page_title="BLUF Email Formatter",
-    page_icon="📧",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+from typing import Dict, Any, Tuple
 
 # Load BLUF tags from JSON
-@st.cache_data
 def load_bluf_tags():
     bluf_tags = [
         {
@@ -115,8 +105,14 @@ def get_system_prompt():
    * Never include extra commentary, markdown, or explanations outside the JSON.
    * Always return an **array** with one object."""
 
-def format_email_with_openai(email_text: str, api_key: str) -> Dict[str, Any]:
+def format_email_with_openai(email_text: str, api_key: str) -> Tuple[str, str, str, str]:
     """Format email using OpenAI API"""
+    if not api_key:
+        return "❌ Error: Please provide your OpenAI API key", "", "", ""
+    
+    if not email_text.strip():
+        return "❌ Error: Please provide email text to format", "", "", ""
+    
     client = openai.OpenAI(api_key=api_key)
     
     try:
@@ -136,141 +132,124 @@ def format_email_with_openai(email_text: str, api_key: str) -> Dict[str, Any]:
         parsed_result = json.loads(result)
         
         if isinstance(parsed_result, list) and len(parsed_result) > 0:
-            return parsed_result[0]
+            data = parsed_result[0]
         else:
-            return parsed_result
+            data = parsed_result
+        
+        subject = data.get('subject', '')
+        email_body = data.get('email', '')
+        bluf_tag = data.get('bluf_tag', '')
+        bluf_summary = data.get('bluf_summary', '')
+        
+        status = "✅ Email formatted successfully!"
+        
+        return status, subject, email_body, f"**Tag:** {bluf_tag}\n\n{bluf_summary}"
             
     except json.JSONDecodeError as e:
-        st.error(f"Failed to parse AI response as JSON: {e}")
-        return None
+        return f"❌ Error: Failed to parse AI response as JSON: {e}", "", "", ""
     except Exception as e:
-        st.error(f"Error calling OpenAI API: {e}")
-        return None
+        return f"❌ Error calling OpenAI API: {e}", "", "", ""
 
-def copy_to_clipboard_js(text: str, button_id: str):
-    """Generate JavaScript for copying text to clipboard"""
-    return f"""
-    <script>
-    function copyToClipboard_{button_id}() {{
-        navigator.clipboard.writeText(`{text}`).then(function() {{
-            console.log('Copied to clipboard');
-        }}, function(err) {{
-            console.error('Could not copy text: ', err);
-        }});
-    }}
-    </script>
-    <button onclick="copyToClipboard_{button_id}()" style="
-        background-color: #ff6b6b;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-left: 10px;
-    ">📋 Copy</button>
-    """
-
-# Main app
-def main():
-    st.title("📧 BLUF Email Formatter")
-    st.markdown("Transform your emails into clear, actionable communication using the **Bottom Line Up Front** methodology.")
+def create_bluf_reference():
+    """Create BLUF tags reference text"""
+    bluf_tags = load_bluf_tags()
+    reference_text = "## 📚 BLUF Tags Reference\n\n"
     
-    # Sidebar for API key and BLUF info
-    with st.sidebar:
-        st.header("🔑 Configuration")
-        api_key = st.text_input(
-            "OpenAI API Key",
-            type="password",
-            help="Enter your OpenAI API key to use the formatter"
+    for tag in bluf_tags:
+        reference_text += f"**{tag['prefix']}** - {tag['description']}\n"
+        reference_text += f"*Example: {tag['example']}*\n\n"
+    
+    reference_text += "\n---\n\n**About BLUF:** Bottom Line Up Front (BLUF) is a communication technique that puts the most important information at the beginning of a message. It helps recipients quickly understand the purpose and required actions."
+    
+    return reference_text
+
+# Create Gradio interface
+def create_interface():
+    """Create the main Gradio interface"""
+    
+    with gr.Blocks(title="📧 BLUF Email Formatter", theme=gr.themes.Soft()) as demo:
+        gr.Markdown(
+            """
+            # 📧 BLUF Email Formatter
+            Transform your emails into clear, actionable communication using the **Bottom Line Up Front** methodology.
+            
+            **Instructions:**
+            1. Enter your OpenAI API key
+            2. Paste your draft email text
+            3. Click "Format Email"
+            4. Copy the formatted subject line and email body
+            """
         )
         
-        st.header("📚 BLUF Tags Reference")
-        bluf_tags = load_bluf_tags()
-        
-        for tag in bluf_tags:
-            with st.expander(f"{tag['prefix']} - {tag['description']}"):
-                st.write(f"**Example:** {tag['example']}")
-                st.write(f"**Use when:** {tag['description']}")
-    
-    # Main content area
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        st.header("📝 Input Email")
-        email_input = st.text_area(
-            "Paste your draft email text here:",
-            height=300,
-            placeholder="Hi team, just reminding everyone that timesheets for this week are due on Friday. Please make sure to submit them by then so payroll can be processed."
-        )
-        
-        format_button = st.button("🚀 Format Email", type="primary", disabled=not api_key or not email_input)
-    
-    with col2:
-        st.header("✨ Formatted Output")
-        
-        if format_button and api_key and email_input:
-            with st.spinner("Formatting your email..."):
-                result = format_email_with_openai(email_input, api_key)
+        with gr.Row():
+            with gr.Column(scale=1):
+                gr.Markdown("## 🔑 Configuration")
+                api_key = gr.Textbox(
+                    label="OpenAI API Key",
+                    type="password",
+                    placeholder="Enter your OpenAI API key...",
+                    info="Your API key is not stored and only used for this session"
+                )
                 
-                if result:
-                    # Store result in session state
-                    st.session_state.formatted_result = result
-        
-        # Display results if available
-        if hasattr(st.session_state, 'formatted_result') and st.session_state.formatted_result:
-            result = st.session_state.formatted_result
+                gr.Markdown("## 📝 Input")
+                email_input = gr.Textbox(
+                    label="Draft Email Text",
+                    placeholder="Hi team, just reminding everyone that timesheets for this week are due on Friday. Please make sure to submit them by then so payroll can be processed.",
+                    lines=8,
+                    max_lines=15
+                )
+                
+                format_btn = gr.Button("🚀 Format Email", variant="primary", size="lg")
             
-            # Subject line with copy button
-            st.subheader("📬 Subject Line")
-            subject_container = st.container()
-            with subject_container:
-                col_subject, col_copy_subject = st.columns([4, 1])
-                with col_subject:
-                    st.code(result.get('subject', ''), language=None)
-                with col_copy_subject:
-                    if st.button("📋", key="copy_subject", help="Copy subject line"):
-                        try:
-                            pyperclip.copy(result.get('subject', ''))
-                            st.success("Copied!")
-                        except:
-                            st.info("Copy manually from above")
-            
-            # Formatted email with copy button
-            st.subheader("📧 Formatted Email")
-            email_container = st.container()
-            with email_container:
-                col_email, col_copy_email = st.columns([4, 1])
-                with col_email:
-                    st.text_area(
-                        "Formatted email body:",
-                        value=result.get('email', ''),
-                        height=200,
-                        key="formatted_email_display"
+            with gr.Column(scale=1):
+                gr.Markdown("## ✨ Formatted Output")
+                
+                status_output = gr.Markdown(label="Status")
+                
+                with gr.Group():
+                    gr.Markdown("### 📬 Subject Line")
+                    subject_output = gr.Textbox(
+                        label="Formatted Subject",
+                        interactive=False,
+                        show_copy_button=True
                     )
-                with col_copy_email:
-                    if st.button("📋", key="copy_email", help="Copy formatted email"):
-                        try:
-                            pyperclip.copy(result.get('email', ''))
-                            st.success("Copied!")
-                        except:
-                            st.info("Copy manually from above")
-            
-            # BLUF Summary (display only)
-            st.subheader("💡 BLUF Summary")
-            st.info(f"**Tag:** {result.get('bluf_tag', '')}")
-            st.write(result.get('bluf_summary', ''))
+                
+                with gr.Group():
+                    gr.Markdown("### 📧 Formatted Email")
+                    email_output = gr.Textbox(
+                        label="Formatted Email Body",
+                        lines=8,
+                        max_lines=15,
+                        interactive=False,
+                        show_copy_button=True
+                    )
+                
+                with gr.Group():
+                    gr.Markdown("### 💡 BLUF Summary")
+                    summary_output = gr.Markdown()
+        
+        # BLUF Reference in an accordion
+        with gr.Accordion("📚 BLUF Tags Reference", open=False):
+            gr.Markdown(create_bluf_reference())
+        
+        # Set up the format button click event
+        format_btn.click(
+            fn=format_email_with_openai,
+            inputs=[email_input, api_key],
+            outputs=[status_output, subject_output, email_output, summary_output]
+        )
+        
+        gr.Markdown(
+            """
+            ---
+            <div style='text-align: center; color: #666;'>
+            <p>Built with ❤️ using Gradio • Learn more about <a href='https://en.wikipedia.org/wiki/BLUF_(communication)' target='_blank'>BLUF Communication</a></p>
+            </div>
+            """
+        )
     
-    # Footer
-    st.markdown("---")
-    st.markdown(
-        """
-        <div style='text-align: center; color: #666;'>
-        <p>Built with ❤️ using Streamlit • Learn more about <a href='https://en.wikipedia.org/wiki/BLUF_(communication)' target='_blank'>BLUF Communication</a></p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    return demo
 
 if __name__ == "__main__":
-    main()
+    demo = create_interface()
+    demo.launch()

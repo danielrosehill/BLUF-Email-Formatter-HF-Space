@@ -1,6 +1,8 @@
-# BLUF Email Formatter (HF Space Demo)
+# BLUF Email Formatter
 
-A Streamlit-based Hugging Face Space that transforms draft emails into clear, actionable communication using the **Bottom Line Up Front (BLUF)** methodology.
+A Gradio-based Hugging Face Space that transforms draft emails into clear, actionable communication using the **Bottom Line Up Front (BLUF)** methodology.
+
+[Learn more about BLUF](https://hbr.org/2016/11/how-to-write-email-with-military-precision).
 
 ## Features
 
@@ -11,12 +13,12 @@ A Streamlit-based Hugging Face Space that transforms draft emails into clear, ac
 
 ## BLUF Tags
 
-- **ACTION:** Recipient must take an action
-- **SIGN:** Recipient needs to sign a document  
+- **ACTION:** Requests action from recipient
+- **SIGN:** Signature request from recipient
 - **INFO:** Informational only; no action required
-- **DECISION:** Recipient must make a decision
-- **REQUEST:** Sender is asking for permission or approval
-- **COORD:** Coordination with or by the recipient is needed
+- **DECISION:** Requests decision from recipient
+- **REQUEST:** Request/approval
+- **COORD:** Information shared for visibility and coordination among team
 
 ## How It Works
 
@@ -38,7 +40,7 @@ UI generates:
 
 ```bash
 pip install -r requirements.txt
-streamlit run app.py
+python app.py
 ```
 
 ## About BLUF
