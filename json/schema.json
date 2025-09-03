@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "BLUFEmail",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "The email subject line, starting with the BLUF tag followed by a concise summary (e.g., 'ACTION: Submit Timesheets by Friday')."
+        },
+        "bluf_tag": {
+          "type": "string",
+          "enum": ["ACTION:", "SIGN:", "INFO:", "DECISION:", "REQUEST:", "COORD:"],
+          "description": "The BLUF tag selected based on the email's intent."
+        },
+        "bluf_summary": {
+          "type": "string",
+          "description": "A two-sentence plain-language summary of the email, capturing the Bottom Line Up Front."
+        },
+        "email": {
+          "type": "string",
+          "description": "The full email body, formatted with the BLUF structure (BLUF header, purpose, BLUF summary, and the original email text)."
+        }
+      },
+      "required": ["subject", "bluf_tag", "bluf_summary", "email"],
+      "additionalProperties": false
+    },
+    "minItems": 1,
+    "maxItems": 1
+  }
+  
