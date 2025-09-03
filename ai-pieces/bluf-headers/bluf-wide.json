@@ -1,0 +1,82 @@
+[
+  {
+    "prefix": "ACTION:",
+    "example": "ACTION: Complete Safety Training by Friday",
+    "description": "Tasking; recipient must take action."
+  },
+  {
+    "prefix": "SIGN:",
+    "example": "SIGN: Endorse Budget Request Form",
+    "description": "Recipient’s signature required."
+  },
+  {
+    "prefix": "INFO:",
+    "example": "INFO: New Office Hours Effective Next Week",
+    "description": "For awareness only; no action needed."
+  },
+  {
+    "prefix": "DECISION:",
+    "example": "DECISION: Select Vendor for New Software",
+    "description": "Recipient must decide on a course of action."
+  },
+  {
+    "prefix": "REQUEST:",
+    "example": "REQUEST: Approval for Remote Work Travel",
+    "description": "Seeking permission or approval."
+  },
+  {
+    "prefix": "COORD:",
+    "example": "COORD: Align Schedules for Annual Review",
+    "description": "Coordination required with or by recipient."
+  },
+  {
+    "prefix": "URGENT:",
+    "example": "URGENT: Security Breach Detected – Immediate Action Required",
+    "description": "Critically time-sensitive; requires immediate attention."
+  },
+  {
+    "prefix": "RISK:",
+    "example": "RISK: Budget Shortfall Projected in Q2",
+    "description": "Flagging a potential or emerging risk."
+  },
+  {
+    "prefix": "ISSUE:",
+    "example": "ISSUE: Payment Gateway Experiencing Outage",
+    "description": "Alerting recipients to a current problem."
+  },
+  {
+    "prefix": "STATUS:",
+    "example": "STATUS: Vendor Contract Renewed Until 2026",
+    "description": "Providing current standing or progress update."
+  },
+  {
+    "prefix": "UPDATE:",
+    "example": "UPDATE: Website Migration Completed Successfully",
+    "description": "Informing of new developments or outcomes."
+  },
+  {
+    "prefix": "REMINDER:",
+    "example": "REMINDER: RSVP for Team Offsite by Tomorrow",
+    "description": "Reinforcing a previous message or deadline."
+  },
+  {
+    "prefix": "FINAL NOTICE:",
+    "example": "FINAL NOTICE: License Renewal Due Sept 10",
+    "description": "Last-call reminder before a deadline or expiration."
+  },
+  {
+    "prefix": "RECOMMENDATION:",
+    "example": "RECOMMENDATION: Consolidate Vendors to Reduce Costs",
+    "description": "Suggesting a course of action."
+  },
+  {
+    "prefix": "PROPOSAL:",
+    "example": "PROPOSAL: Transition to Cloud Provider X",
+    "description": "Presenting a plan or option for consideration."
+  },
+  {
+    "prefix": "FYI:",
+    "example": "FYI: Coffee Machine Temporarily Out of Service",
+    "description": "Informal information; no action needed."
+  }
+]

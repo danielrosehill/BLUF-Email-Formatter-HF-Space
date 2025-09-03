@@ -1,0 +1,32 @@
+[
+  {
+    "prefix": "ACTION:",
+    "example": "ACTION: Submit Timesheets by Friday",
+    "description": "Recipient must take an action."
+  },
+  {
+    "prefix": "SIGN:",
+    "example": "SIGN: Approval Needed on Contract Addendum",
+    "description": "Recipient needs to sign a document."
+  },
+  {
+    "prefix": "INFO:",
+    "example": "INFO: New Parking Policy Effective October 1",
+    "description": "Informational only; no action required."
+  },
+  {
+    "prefix": "DECISION:",
+    "example": "DECISION: Choose Office Supply Vendor by Friday",
+    "description": "Recipient must make a decision."
+  },
+  {
+    "prefix": "REQUEST:",
+    "example": "REQUEST: Vacation Days Approval for Oct 5–12",
+    "description": "Sender is asking for permission or approval."
+  },
+  {
+    "prefix": "COORD:",
+    "example": "COORD: Schedule Product Launch Strategy Meeting",
+    "description": "Coordination with or by the recipient is needed."
+  }
+]
